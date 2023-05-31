@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using FluentValidation.Results;
 
-namespace Authentication.Endpoints.GetToken
+namespace Authentication.Endpoints.Login
 {
     public class LoginRequestValidator : Validator<LoginRequest>
     {

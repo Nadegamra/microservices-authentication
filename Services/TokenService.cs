@@ -1,4 +1,4 @@
-﻿using Authentication.Endpoints.GetToken;
+﻿using Authentication.Endpoints.Login;
 using Authentication.Models;
 using FastEndpoints;
 using FastEndpoints.Security;

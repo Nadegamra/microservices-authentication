@@ -17,6 +17,7 @@ var services = builder.Services;
     services.AddSwaggerDoc();
 
     services.AddTransient<TokenService>();
+    services.AddTransient<HashingService>();
 
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");// Change to "MigrationConnection" when updating the database
     services.AddDbContext<AppDbContext>(options =>
