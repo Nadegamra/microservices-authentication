@@ -20,8 +20,14 @@ namespace Authentication.Endpoints.Profile
         {
             var user = appDbContext.Users.Where(x => x.Id == req.UserId).First();
 
-            Response = Map.FromEntity(user);
-            await SendOkAsync(Response);
+            if (user is null)
+            {
+                await SendNotFoundAsync();
+            }
+            else
+            {
+                await SendOkAsync(Map.FromEntity(user));
+            }
         }
     }
 }

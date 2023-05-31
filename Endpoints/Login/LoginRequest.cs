@@ -1,7 +1,5 @@
-﻿using FastEndpoints;
-using FastEndpoints.Security;
+﻿using FastEndpoints.Security;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Authentication.Endpoints.Login
 {

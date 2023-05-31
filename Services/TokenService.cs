@@ -28,7 +28,8 @@ namespace Authentication.Services
         {
             appDbContext.UserTokens.Add(new UserToken
             {
-                AccessToken = response.AccessToken,
+                UserId = Convert.ToInt32(response.UserId),
+                AccessToken = response.RefreshToken,
                 AccessExpiry = response.AccessExpiry,
                 RefreshExpiry = response.RefreshExpiry,
             });
@@ -37,7 +38,7 @@ namespace Authentication.Services
 
         public override async Task RefreshRequestValidationAsync(LoginRequest req)
         {
-            var token = appDbContext.UserTokens.Where(x => x.UserId == Convert.ToInt32(req.UserId) && req.RefreshToken == req.RefreshToken && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
+            var token = appDbContext.UserTokens.Where(x => x.UserId.ToString().Equals(req.UserId) && req.RefreshToken == x.AccessToken && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
 
             if (token == null)
             {
