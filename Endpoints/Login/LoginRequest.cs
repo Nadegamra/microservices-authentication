@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FastEndpoints;
+using FastEndpoints.Security;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace Authentication.Endpoints.Login
+namespace Authentication.Endpoints.GetToken
 {
-    public class LoginRequest
+    public class LoginRequest: TokenRequest
     {
         [Required]
         public string Email { get; set; }
@@ -10,5 +13,9 @@ namespace Authentication.Endpoints.Login
         [DataType(DataType.Password)]
         public string Password { get; set; }
         public bool RememberPassword { get; set; }
+
+        [JsonIgnore] public new string UserId { get; set; } = null!;
+
+        [JsonIgnore] public new string RefreshToken { get; set; } = null!;
     }
 }

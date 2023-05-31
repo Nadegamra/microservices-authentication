@@ -1,48 +1,80 @@
-﻿using Authentication.Endpoints.Login;
-using FastEndpoints;
-using Microsoft.AspNetCore.Identity;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using FastEndpoints;
+using System.Security.Cryptography;
+using System.Text;
+using Authentication.Services;
 
-namespace Authentication.Endpoints.Register
+namespace Authentication.Endpoints.GetToken
 {
-    public class LoginEndpoint: Endpoint<LoginRequest, LoginResponse,LoginMapper>
+    public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
     {
         public override void Configure()
         {
-            Post("login");
+            Post("auth/login");
             AllowAnonymous();
         }
 
-        private readonly UserManager<IdentityUser<int>> userManager;
-        private readonly SignInManager<IdentityUser<int>> signInManager;
+        private readonly AppDbContext appDbContext;
 
-        public LoginEndpoint(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager)
+        public LoginEndpoint(AppDbContext appDbContext)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            this.appDbContext = appDbContext;
         }
 
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
-            var user = await userManager.FindByEmailAsync(req.Email);
-            if (user is null)
+            if (!CheckUser(req.Email, req.Password))
             {
-                throw new ArgumentException("Login credentials are incorrect");
+                await SendErrorsAsync(400, ct);
+                return;
             }
-            if (!user.EmailConfirmed)
-            {
-                throw new ArgumentException("Email has not been confirmed yet");
-            }
-            var signInResult = await signInManager.PasswordSignInAsync(user, req.Password, req.RememberPassword, false);
 
-            if (!signInResult.Succeeded)
-            {
-                throw new ArgumentException("Login credentials are incorrect");
-            }
-            Response = Map.FromEntity(user);
-            Response.Role = (await userManager.GetRolesAsync(user)).First();
+            var user = appDbContext.Users.Where(x => x.Email == req.Email).First();
+            var userRole = appDbContext.UserRoles.Where(x => x.UserId == user.Id).First().RoleId;
+            string roleName = appDbContext.Roles.Where(x => x.Id == userRole).First().NormalizedName;
 
-            await SendOkAsync(Response);
+            Response = await CreateTokenWith<TokenService>(user.Id.ToString(), u =>
+            {
+                u.Roles.Add(roleName);
+                //u.Permissions.AddRange(new[] { "ManageUsers", "ManageInventory" });
+                u.Claims.Add(new("UserId", user.Id.ToString()));
+                u.Claims.Add(new("UserEmail", user.Email));
+            });
+
+            //var jwtToken = JWTBearer.CreateToken(
+            //    signingKey: "Key+F0rTOk&n+Sig=1n6",
+            //    expireAt: DateTime.UtcNow.AddDays(1),
+            //    priviledges: u =>
+            //    {
+            //        u.Roles.Add(roleName);
+            //        //u.Permissions.AddRange(new[] { "ManageUsers", "ManageInventory" });
+            //        u.Claims.Add(new("UserId", user.Id.ToString()));
+            //        u.Claims.Add(new("UserEmail", user.Email));
+            //    });
+
+            //Response.AccessToken = jwtToken;
+            await SendOkAsync(Response, ct);
+        }
+
+        private bool CheckUser(string email, string password)
+        {
+            var user = appDbContext.Users.Where(x => x.Email.ToUpper() == email.ToUpper()).FirstOrDefault();
+            if (user == null)
+            {
+                return false;
+            }
+
+            return HashPassword(password) == user.PasswordHash;
+        }
+
+        private string HashPassword(string password)
+        {
+            const string salt = "Ac15!.=";
+            return Convert.ToHexString(Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password),
+                Encoding.UTF8.GetBytes(salt),
+                350000,
+                HashAlgorithmName.SHA512,
+                128));
         }
     }
 }

@@ -1,27 +1,32 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Authentication.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
 namespace Authentication
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser<int>,IdentityRole<int>,int>
+    public class AppDbContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int> { Id = 1, Name = "admin", NormalizedName = "ADMIN" },
-                                                new IdentityRole<int> { Id = 2, Name = "creator", NormalizedName = "CREATOR" },
-                                                new IdentityRole<int> { Id = 3, Name = "consumer", NormalizedName = "CONSUMER" });
+            builder.Entity<Role>().HasData(new Role { Id = 1, Name = "admin", NormalizedName = "ADMIN" },
+                                                new Role { Id = 2, Name = "creator", NormalizedName = "CREATOR" },
+                                                new Role { Id = 3, Name = "consumer", NormalizedName = "CONSUMER" });
 
-            builder.Entity<IdentityUser<int>>().HasData(new IdentityUser<int> { Id = 1, UserName = "admin@admin.com", NormalizedUserName = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedEmail = "ADMIN@ADMIN.COM", PasswordHash = "AQAAAAEAACcQAAAAEK4hVsHx9G6FTUDDlJaY/l1aRXqpoUZU9nkEkvECUI2uQ+FHoFYHjlJpmP3KOss/qg==" },
-                                                new IdentityUser<int> { Id = 2, UserName = "creator@example.com", NormalizedUserName = "CREATOR@EXAMPLE.COM", Email = "creator@example.com", EmailConfirmed = true, NormalizedEmail = "CREATOR@EXAMPLE.COM", PasswordHash = "AQAAAAEAACcQAAAAEK4hVsHx9G6FTUDDlJaY/l1aRXqpoUZU9nkEkvECUI2uQ+FHoFYHjlJpmP3KOss/qg==" },
-            new IdentityUser<int> { Id = 3, UserName = "consumer@example.com", NormalizedUserName = "CONSUMER@EXAMPLE.COM", Email = "consumer@example.com", EmailConfirmed = true, NormalizedEmail = "CONSUMER@EXAMPLE.COM", PasswordHash = "AQAAAAEAACcQAAAAEK4hVsHx9G6FTUDDlJaY/l1aRXqpoUZU9nkEkvECUI2uQ+FHoFYHjlJpmP3KOss/qg==" });
+            builder.Entity<User>().HasData(new User { Id = 1, Username = "admin@admin.com", NormalizedUsername = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedEmail = "ADMIN@ADMIN.COM", PasswordHash = "0E63C20429D349EEED0C689DB2E47F1661927CFFFB8124DA456276854575367D0DED966F2C00D9D3A162B98DB8915371A880FB079C86E2AF9C04CC751A9BB9174FF0913A71ABD5CBE112EEAEC812709DB749234CF9ADDECE2937F2A1FC0BF2554E3EA3655EBFB712E0598B45C05FBF893084C7AA1ABF1F990603DD1D9B71400A" },
+                                                new User { Id = 2, Username = "creator@example.com", NormalizedUsername = "CREATOR@EXAMPLE.COM", Email = "creator@example.com", EmailConfirmed = true, NormalizedEmail = "CREATOR@EXAMPLE.COM", PasswordHash = "0E63C20429D349EEED0C689DB2E47F1661927CFFFB8124DA456276854575367D0DED966F2C00D9D3A162B98DB8915371A880FB079C86E2AF9C04CC751A9BB9174FF0913A71ABD5CBE112EEAEC812709DB749234CF9ADDECE2937F2A1FC0BF2554E3EA3655EBFB712E0598B45C05FBF893084C7AA1ABF1F990603DD1D9B71400A" },
+                                                new User { Id = 3, Username = "consumer@example.com", NormalizedUsername = "CONSUMER@EXAMPLE.COM", Email = "consumer@example.com", EmailConfirmed = true, NormalizedEmail = "CONSUMER@EXAMPLE.COM", PasswordHash = "0E63C20429D349EEED0C689DB2E47F1661927CFFFB8124DA456276854575367D0DED966F2C00D9D3A162B98DB8915371A880FB079C86E2AF9C04CC751A9BB9174FF0913A71ABD5CBE112EEAEC812709DB749234CF9ADDECE2937F2A1FC0BF2554E3EA3655EBFB712E0598B45C05FBF893084C7AA1ABF1F990603DD1D9B71400A" });
 
-            builder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int> { UserId = 1, RoleId = 1 },
-                                                                 new IdentityUserRole<int> { UserId = 2, RoleId = 2 },
-                                                                 new IdentityUserRole<int> { UserId = 3, RoleId = 3 });
+            builder.Entity<UserRole>().HasData(new UserRole { UserId = 1, RoleId = 1 },
+                                                                 new UserRole { UserId = 2, RoleId = 2 },
+                                                                 new UserRole { UserId = 3, RoleId = 3 });
 
 
             base.OnModelCreating(builder);
