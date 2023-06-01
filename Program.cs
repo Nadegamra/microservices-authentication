@@ -18,11 +18,11 @@ var services = builder.Services;
 
     services.AddTransient<TokenService>();
     services.AddTransient<HashingService>();
+    services.AddTransient<EmailService>();
 
-    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");// Change to "MigrationConnection" when updating the database
+    string connectionString = builder.Configuration["ConnectionString"];// Change to "MigrationConnection" when updating the database
     services.AddDbContext<AppDbContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
 }
 var app = builder.Build();
 {
