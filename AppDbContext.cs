@@ -12,6 +12,9 @@ namespace Authentication
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<UserToken> UserTokens { get; set; }
+        public DbSet<EmailConfirmationToken> EmailConfirmationTokens { get; set; }
+        public DbSet<EmailChangeToken> EmailChangeTokens { get; set; }
+        public DbSet<PasswordChangeToken> PasswordChangeTokens { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
         protected override void OnModelCreating(ModelBuilder builder)

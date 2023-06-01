@@ -14,9 +14,9 @@ namespace Authentication.Endpoints.Login
         }
 
         private readonly AppDbContext appDbContext;
-        private readonly HashingService hashingService;
+        private readonly CryptoService hashingService;
 
-        public LoginEndpoint(AppDbContext appDbContext, HashingService hashingService)
+        public LoginEndpoint(AppDbContext appDbContext, CryptoService hashingService)
         {
             this.appDbContext = appDbContext;
             this.hashingService = hashingService;
