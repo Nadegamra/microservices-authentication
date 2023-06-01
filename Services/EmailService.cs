@@ -1,33 +1,35 @@
 ﻿using FastEndpoints;
 using System.Net.Mail;
 using System.Net;
+using Authentication.Properties;
+using Microsoft.Extensions.Options;
 
 namespace Authentication.Services
 {
     public class EmailService
     {
-        private readonly IConfiguration config;
+        private readonly IOptions<SmtpConfig> smtpConfig;
         private readonly SmtpClient smtpClient;
-        public EmailService(IConfiguration config)
+        public EmailService(IOptions<SmtpConfig> smtpConfig)
         {
-            this.config = config;
+            this.smtpConfig = smtpConfig;
             smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential(config["EmailAddress"], config["EmailPassword"]),
+                Credentials = new NetworkCredential(smtpConfig.Value.EmailAddress, smtpConfig.Value.EmailPassword),
                 EnableSsl = true
             };
         }
         public bool SendEmail(string toEmail, string emailSubject, string emailBodyHtml)
         {
-            if (config["EmailAddress"] == null)
+            if (smtpConfig.Value.EmailAddress == null)
             {
                 return false;
             }
-            string? testEmail = config["TestEmail"];
+            string? testEmail = smtpConfig.Value.TestEmail;
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(config["EmailAddress"]!),
+                From = new MailAddress(smtpConfig.Value.EmailAddress),
                 Subject = emailSubject,
                 Body = emailBodyHtml,
                 IsBodyHtml = true,

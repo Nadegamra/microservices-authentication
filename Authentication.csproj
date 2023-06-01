@@ -30,7 +30,6 @@
     <Folder Include="Endpoints\ChangeEmail\" />
     <Folder Include="Endpoints\ChangePassword\" />
     <Folder Include="Endpoints\ConfirmEmail\" />
-    <Folder Include="Endpoints\Register\" />
   </ItemGroup>
 
 </Project>
