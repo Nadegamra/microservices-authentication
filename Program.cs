@@ -14,7 +14,7 @@ var services = builder.Services;
     services.AddCors();
 
     services.AddFastEndpoints();
-    services.AddJWTBearerAuth("Key+F0rTOk&n+Sig=1n6");
+    services.AddJWTBearerAuth(builder.Configuration["JwtSecret"]);
     services.AddSwaggerDoc();
 
     services.Configure<SmtpConfig>(builder.Configuration.GetSection("Smtp"));

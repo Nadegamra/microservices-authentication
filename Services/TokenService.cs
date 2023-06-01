@@ -12,7 +12,7 @@ namespace Authentication.Services
         {
             Setup(o =>
             {
-                o.TokenSigningKey = "Key+F0rTOk&n+Sig=1n6";
+                o.TokenSigningKey = config["JwtSecret"];
                 o.AccessTokenValidity = TimeSpan.FromMinutes(5);
                 o.RefreshTokenValidity = TimeSpan.FromHours(4);
 
@@ -48,9 +48,19 @@ namespace Authentication.Services
 
         public override async Task SetRenewalPrivilegesAsync(LoginRequest request, UserPrivileges privileges)
         {
-            privileges.Roles.AddRange(privileges.Roles);
-            privileges.Claims.AddRange(privileges.Claims);
-            privileges.Permissions.AddRange(privileges.Permissions);
+            var user = appDbContext.Users.Where(x => x.Id.ToString() == request.UserId).FirstOrDefault();
+            if (user == null)
+            {
+                throw new Exception("User with this id does not exist");
+            }
+
+            var userRole = appDbContext.UserRoles.Where(x => x.UserId == user.Id).First().RoleId;
+            string roleName = appDbContext.Roles.Where(x => x.Id == userRole).First().NormalizedName;
+
+            privileges.Roles.Add(roleName);
+            
+            privileges.Claims.Add(new("UserId", request.UserId));
+            privileges.Claims.Add(new("UserEmail", user.Email));
         }
     }
 }
