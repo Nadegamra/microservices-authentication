@@ -25,7 +25,7 @@ var services = builder.Services;
     services.AddTransient<EmailService>();
 
     string connectionString = builder.Configuration.GetSection("Database")["ConnectionString"];// Change to "MigrationConnection" when updating the database
-    services.AddDbContext<AppDbContext>(options =>
+    services.AddDbContext<AuthDbContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 }
 var app = builder.Build();

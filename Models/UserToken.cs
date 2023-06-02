@@ -10,5 +10,6 @@ namespace Authentication.Models
         public string AccessToken { get; set; } = null!;
         public DateTime AccessExpiry { get; internal set; }
         public DateTime RefreshExpiry { get; internal set; }
+        public bool Used { get; set; } = false;
     }
 }

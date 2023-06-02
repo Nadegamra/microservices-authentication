@@ -13,12 +13,12 @@ namespace Authentication.Endpoints.SendEmailChangeToken
             Post("auth/sendEmailChangeToken");
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly CryptoService cryptoService;
         private readonly EmailService emailService;
         private readonly IOptions<IPConfig> ipConfig;
 
-        public SendEmailChangeTokenEndpoint(AppDbContext appDbContext, CryptoService cryptoService, EmailService emailService, IOptions<IPConfig> ipConfig)
+        public SendEmailChangeTokenEndpoint(AuthDbContext appDbContext, CryptoService cryptoService, EmailService emailService, IOptions<IPConfig> ipConfig)
         {
             this.appDbContext = appDbContext;
             this.cryptoService = cryptoService;

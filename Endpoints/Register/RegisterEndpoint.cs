@@ -14,12 +14,12 @@ namespace Authentication.Endpoints.Register
             AllowAnonymous();
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly EmailService emailService;
         private readonly CryptoService cryptoService;
         private readonly IOptions<IPConfig> ipConfig;
 
-        public RegisterEndpoint(AppDbContext appDbContext, EmailService emailService, CryptoService cryptoService, IOptions<IPConfig> ipConfig)
+        public RegisterEndpoint(AuthDbContext appDbContext, EmailService emailService, CryptoService cryptoService, IOptions<IPConfig> ipConfig)
         {
             this.appDbContext = appDbContext;
             this.emailService = emailService;

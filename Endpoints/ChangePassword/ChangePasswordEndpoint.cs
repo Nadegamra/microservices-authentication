@@ -12,10 +12,10 @@ namespace Authentication.Endpoints.ChangePassword
             AllowAnonymous();
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly CryptoService cryptoService;
 
-        public ChangePasswordEndpoint(AppDbContext appDbContext, CryptoService cryptoService)
+        public ChangePasswordEndpoint(AuthDbContext appDbContext, CryptoService cryptoService)
         {
             this.appDbContext = appDbContext;
             this.cryptoService = cryptoService;

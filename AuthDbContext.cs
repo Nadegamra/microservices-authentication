@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 namespace Authentication
 {
-    public class AppDbContext : DbContext
+    public class AuthDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -15,7 +15,7 @@ namespace Authentication
         public DbSet<EmailConfirmationToken> EmailConfirmationTokens { get; set; }
         public DbSet<EmailChangeToken> EmailChangeTokens { get; set; }
         public DbSet<PasswordChangeToken> PasswordChangeTokens { get; set; }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
