@@ -14,12 +14,12 @@ namespace Authentication.Endpoints.SendPasswordResetToken
             AllowAnonymous();
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly CryptoService cryptoService;
         private readonly EmailService emailService;
         private readonly IOptions<IPConfig> ipConfig;
 
-        public SendPasswordResetTokenEndpoint(AppDbContext appDbContext, CryptoService cryptoService, EmailService emailService, IOptions<IPConfig> ipConfig)
+        public SendPasswordResetTokenEndpoint(AuthDbContext appDbContext, CryptoService cryptoService, EmailService emailService, IOptions<IPConfig> ipConfig)
         {
             this.appDbContext = appDbContext;
             this.cryptoService = cryptoService;

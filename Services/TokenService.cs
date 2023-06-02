@@ -7,8 +7,9 @@ namespace Authentication.Services
 {
     public class TokenService : RefreshTokenService<LoginRequest, LoginResponse>
     {
-        private readonly AppDbContext appDbContext;
-        public TokenService(IConfiguration config, AppDbContext appDbContext)
+        private readonly AuthDbContext appDbContext;
+        private readonly CryptoService cryptoService;
+        public TokenService(IConfiguration config, AuthDbContext appDbContext, CryptoService cryptoService)
         {
             Setup(o =>
             {
@@ -22,6 +23,7 @@ namespace Authentication.Services
                 });
             });
             this.appDbContext = appDbContext;
+            this.cryptoService = cryptoService;
         }
 
         public override async Task PersistTokenAsync(LoginResponse response)
@@ -29,21 +31,37 @@ namespace Authentication.Services
             appDbContext.UserTokens.Add(new UserToken
             {
                 UserId = Convert.ToInt32(response.UserId),
-                AccessToken = response.RefreshToken,
+                AccessToken = cryptoService.GetHash(response.RefreshToken),
                 AccessExpiry = response.AccessExpiry,
                 RefreshExpiry = response.RefreshExpiry,
+                Used = false,
             });
             appDbContext.SaveChanges();
         }
 
         public override async Task RefreshRequestValidationAsync(LoginRequest req)
         {
-            var token = appDbContext.UserTokens.Where(x => x.UserId.ToString().Equals(req.UserId) && req.RefreshToken == x.AccessToken && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
+            var token = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId && cryptoService.GetHash(req.RefreshToken) == x.AccessToken && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
 
             if (token == null)
             {
                 AddError(r => r.RefreshToken, "Refresh token is invalid!");
+                return;
             }
+
+            if(token.Used)
+            {
+                var userTokens = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId).ToList();
+                appDbContext.UserTokens.RemoveRange(userTokens);
+                appDbContext.SaveChanges();
+                AddError(r => r.RefreshToken, "Refresh token is invalid!");
+                return;
+            }
+
+            token.Used = true;
+            appDbContext.UserTokens.Update(token);
+            appDbContext.SaveChanges();
+
         }
 
         public override async Task SetRenewalPrivilegesAsync(LoginRequest request, UserPrivileges privileges)

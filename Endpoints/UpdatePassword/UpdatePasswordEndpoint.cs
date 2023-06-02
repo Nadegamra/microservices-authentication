@@ -10,10 +10,10 @@ namespace Authentication.Endpoints.UpdatePassword
             Post("auth/updatePassword");
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly CryptoService cryptoService;
 
-        public UpdatePasswordEndpoint(AppDbContext appDbContext, CryptoService cryptoService)
+        public UpdatePasswordEndpoint(AuthDbContext appDbContext, CryptoService cryptoService)
         {
             this.appDbContext = appDbContext;
             this.cryptoService = cryptoService;

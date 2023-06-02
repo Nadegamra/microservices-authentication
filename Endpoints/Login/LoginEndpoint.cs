@@ -13,10 +13,10 @@ namespace Authentication.Endpoints.Login
             AllowAnonymous();
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
         private readonly CryptoService hashingService;
 
-        public LoginEndpoint(AppDbContext appDbContext, CryptoService hashingService)
+        public LoginEndpoint(AuthDbContext appDbContext, CryptoService hashingService)
         {
             this.appDbContext = appDbContext;
             this.hashingService = hashingService;
@@ -24,7 +24,7 @@ namespace Authentication.Endpoints.Login
 
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
-            var user = appDbContext.Users.Where(x => x.Email == req.Email).First();
+            var user = appDbContext.Users.Where(x => x.Email == req.Email).FirstOrDefault();
             if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash)
             {
                 await SendErrorsAsync(400, ct);

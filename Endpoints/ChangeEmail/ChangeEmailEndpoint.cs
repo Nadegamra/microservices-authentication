@@ -10,9 +10,9 @@ namespace Authentication.Endpoints.ChangeEmail
             Post("auth/changeEmail");
             AllowAnonymous();
         }
-        public readonly AppDbContext appDbContext;
+        public readonly AuthDbContext appDbContext;
 
-        public ChangeEmailEndpoint(AppDbContext appDbContext)
+        public ChangeEmailEndpoint(AuthDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }

@@ -9,9 +9,9 @@ namespace Authentication.Endpoints.Profile
             Get("auth/profile");
         }
 
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
 
-        public ProfileEndpoint(AppDbContext appDbContext)
+        public ProfileEndpoint(AuthDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }

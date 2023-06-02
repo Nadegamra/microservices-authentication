@@ -9,9 +9,9 @@ namespace Authentication.Endpoints.ConfirmEmail
             Post("auth/confirmEmail");
             AllowAnonymous();
         }
-        private readonly AppDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
 
-        public ConfirmEmailEndpoint(AppDbContext appDbContext)
+        public ConfirmEmailEndpoint(AuthDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }
