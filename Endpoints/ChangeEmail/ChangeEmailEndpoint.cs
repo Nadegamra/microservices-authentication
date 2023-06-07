@@ -1,5 +1,7 @@
-﻿using Authentication.Models;
+﻿using Authentication.IntegrationEvents.Events;
+using Authentication.Models;
 using FastEndpoints;
+using Infrastructure.EventBus.Generic;
 
 namespace Authentication.Endpoints.ChangeEmail
 {
@@ -10,11 +12,13 @@ namespace Authentication.Endpoints.ChangeEmail
             Post("auth/changeEmail");
             AllowAnonymous();
         }
-        public readonly AuthDbContext appDbContext;
+        private readonly AuthDbContext appDbContext;
+        private readonly Infrastructure.EventBus.Generic.IEventBus eventBus;
 
-        public ChangeEmailEndpoint(AuthDbContext appDbContext)
+        public ChangeEmailEndpoint(AuthDbContext appDbContext, Infrastructure.EventBus.Generic.IEventBus eventBus)
         {
             this.appDbContext = appDbContext;
+            this.eventBus = eventBus;
         }
 
         public override async Task HandleAsync(ChangeEmailRequest req, CancellationToken ct)
@@ -33,6 +37,9 @@ namespace Authentication.Endpoints.ChangeEmail
                 return;
             }
 
+            string oldEmail = user.Email;
+            string oldUsername = user.Username;
+
             user.Email = token.EmailAddress;
             user.NormalizedEmail = token.EmailAddress.ToUpper();
 
@@ -40,6 +47,20 @@ namespace Authentication.Endpoints.ChangeEmail
             user.NormalizedUsername = token.EmailAddress.ToUpper();
 
             appDbContext.Users.Update(user);
+
+            eventBus.Publish(new UserEmailChangedIntegrationEvent()
+            {
+                NewEmail = token.EmailAddress,
+                OldEmail = oldEmail,
+                UserId = user.Id
+            });
+
+            eventBus.Publish(new UserNameChangedIntegrationEvent()
+            {
+                NewUserName = token.EmailAddress,
+                OldUserName = oldUsername,
+                UserId = user.Id
+            });
 
             appDbContext.EmailChangeTokens.Remove(token);
 

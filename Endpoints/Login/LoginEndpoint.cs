@@ -40,6 +40,7 @@ namespace Authentication.Endpoints.Login
                 //u.Permissions.AddRange(new[] { "ManageUsers", "ManageInventory" });
                 u.Claims.Add(new("UserId", user.Id.ToString()));
                 u.Claims.Add(new("UserEmail", user.Email));
+                u.Claims.Add(new("UserName", user.Username));
             });
             await SendOkAsync(Response, ct);
         }

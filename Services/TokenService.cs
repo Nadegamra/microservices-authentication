@@ -79,6 +79,7 @@ namespace Authentication.Services
             
             privileges.Claims.Add(new("UserId", request.UserId));
             privileges.Claims.Add(new("UserEmail", user.Email));
+            privileges.Claims.Add(new("UserName", user.Username));
         }
     }
 }

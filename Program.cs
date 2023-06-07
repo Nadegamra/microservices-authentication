@@ -5,6 +5,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,9 @@ var services = builder.Services;
     string connectionString = builder.Configuration.GetSection("Database")["ConnectionString"];// Change to "MigrationConnection" when updating the database
     services.AddDbContext<AuthDbContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+    // Event Bus
+    builder = ConfigureServices.AddEventBus(builder);
 }
 var app = builder.Build();
 {
@@ -42,5 +46,7 @@ var app = builder.Build();
     app.UseFastEndpoints();
 
     app.UseSwaggerGen();
+
+    var eventBus = app.Services.GetRequiredService<Infrastructure.EventBus.Generic.IEventBus>();
 }
 app.Run();
