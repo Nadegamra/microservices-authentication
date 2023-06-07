@@ -1,9 +1,5 @@
 ﻿using Authentication.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-
 namespace Authentication
 {
     public class AuthDbContext : DbContext
