@@ -44,7 +44,7 @@ namespace Authentication.Endpoints.Register
             UserRole userRole = new UserRole
             {
                 UserId = result.Entity.Id,
-                RoleId = 3,
+                RoleId = req.Role == Enums.Role.Consumer ? 3 : 2,//TODO: increase clarity
             };
             appDbContext.UserRoles.Add(userRole);
 
