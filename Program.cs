@@ -30,7 +30,7 @@ var services = builder.Services;
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
     // Event Bus
-    builder = ConfigureServices.AddEventBus(builder);
+    ConfigureServices.AddEventBus(builder);
 }
 var app = builder.Build();
 {

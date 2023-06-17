@@ -6,11 +6,26 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["Authentication/Authentication.csproj", "Authentication/"]
-RUN dotnet restore "Authentication/Authentication.csproj"
+COPY ["Services/Services.Common/Services.Common.csproj", "Services/Services.Common/"]
+RUN dotnet restore "Services/Services.Common/Services.Common.csproj"
 COPY . .
-WORKDIR "/src/Authentication"
+WORKDIR "/src/Services/Services.Common"
+RUN dotnet build "Services.Common.csproj" -c Release -o /app/build
+
+WORKDIR /src
+COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
+RUN dotnet restore "Infrastructure/Infrastructure.csproj"
+COPY . .
+WORKDIR "/src/Infrastructure"
+RUN dotnet build "Infrastructure.csproj" -c Release -o /app/build
+
+WORKDIR /src
+COPY ["Services/Authentication/Authentication.csproj", "Services/Authentication/"]
+RUN dotnet restore "Services/Authentication/Authentication.csproj"
+COPY . .
+WORKDIR "/src/Services/Authentication"
 RUN dotnet build "Authentication.csproj" -c Release -o /app/build
 
 FROM build AS publish
