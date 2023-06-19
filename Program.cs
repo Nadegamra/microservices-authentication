@@ -12,7 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var services = builder.Services;
 {
-    services.AddCors();
+    services.AddCors((options) =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins("https://localhost:3000", "http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+        });
+    });
 
     services.AddFastEndpoints();
     services.AddJWTBearerAuth(builder.Configuration["JwtSecret"]);
@@ -35,9 +44,9 @@ var services = builder.Services;
 var app = builder.Build();
 {
     app.UseHttpsRedirection();
-    
+
     app.UseCors();
-    
+
     app.UseRouting();
 
     app.UseAuthentication();
