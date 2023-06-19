@@ -1,10 +1,12 @@
 using Authentication;
+using Authentication.BackgroundTasks;
 using Authentication.Properties;
 using Authentication.Services;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,8 @@ var services = builder.Services;
             .AllowCredentials();
         });
     });
+
+    services.AddHostedService<ClearExpiredRefreshTokens>();
 
     services.AddFastEndpoints();
     services.AddJWTBearerAuth(builder.Configuration["JwtSecret"]);

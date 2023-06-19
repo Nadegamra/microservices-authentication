@@ -25,7 +25,7 @@ namespace Authentication.Endpoints.Login
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
             var user = appDbContext.Users.Where(x => x.Email == req.Email).FirstOrDefault();
-            if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash)
+            if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash || !user.EmailConfirmed)
             {
                 await SendErrorsAsync(400, ct);
                 return;
