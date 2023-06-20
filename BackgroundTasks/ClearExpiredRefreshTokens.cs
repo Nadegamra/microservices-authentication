@@ -1,4 +1,6 @@
-﻿namespace Authentication.BackgroundTasks
+﻿using Infrastructure.EventBus.Generic;
+
+namespace Authentication.BackgroundTasks
 {
     public class ClearExpiredRefreshTokens : BackgroundService
     {
@@ -19,7 +21,7 @@
         private async Task DeleteExpired(CancellationToken stoppingToken)
         {
             int amount = 0;
-            using(var scope = _services.CreateScope())
+            using (var scope = _services.CreateScope())
             {
                 var _authDbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
                 var expiredTokens = _authDbContext.UserTokens.Where(x => x.RefreshExpiry < DateTime.UtcNow).ToList();
@@ -29,7 +31,7 @@
                 await _authDbContext.SaveChangesAsync(stoppingToken);
             }
             _logger.Log(LogLevel.Information, $"Removed {amount} expired tokens");
-            await Task.Delay(new TimeSpan(1,0,0), stoppingToken);
+            await Task.Delay(new TimeSpan(1, 0, 0), stoppingToken);
         }
     }
 }

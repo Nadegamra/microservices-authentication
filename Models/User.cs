@@ -16,5 +16,7 @@ namespace Authentication.Models
         [PersonalData]
         public bool EmailConfirmed { get; set; }
         public string PasswordHash { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }

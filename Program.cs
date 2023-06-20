@@ -26,10 +26,11 @@ var services = builder.Services;
     });
 
     services.AddHostedService<ClearExpiredRefreshTokens>();
+    services.AddHostedService<UserDeletion>();
 
     services.AddFastEndpoints();
     services.AddJWTBearerAuth(builder.Configuration["JwtSecret"]);
-    services.AddSwaggerDoc();
+    services.SwaggerDocument();
 
     services.Configure<SmtpConfig>(builder.Configuration.GetSection("Smtp"));
     services.Configure<IPConfig>(builder.Configuration.GetSection("IP"));

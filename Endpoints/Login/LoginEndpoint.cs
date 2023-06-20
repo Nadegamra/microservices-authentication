@@ -34,6 +34,9 @@ namespace Authentication.Endpoints.Login
             var userRole = appDbContext.UserRoles.Where(x => x.UserId == user.Id).First().RoleId;
             string roleName = appDbContext.Roles.Where(x => x.Id == userRole).First().NormalizedName;
 
+            user.IsDeleted = false;
+            user.DeletedAt = null;
+
             Response = await CreateTokenWith<TokenService>(user.Id.ToString(), u =>
             {
                 u.Roles.Add(roleName);

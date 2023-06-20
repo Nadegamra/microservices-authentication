@@ -31,7 +31,7 @@ namespace Authentication.Services
             appDbContext.UserTokens.Add(new UserToken
             {
                 UserId = Convert.ToInt32(response.UserId),
-                AccessToken = cryptoService.GetHash(response.RefreshToken),
+                RefreshTokenHash = cryptoService.GetHash(response.RefreshToken),
                 AccessExpiry = response.AccessExpiry,
                 RefreshExpiry = response.RefreshExpiry,
                 Used = false,
@@ -41,7 +41,7 @@ namespace Authentication.Services
 
         public override async Task RefreshRequestValidationAsync(LoginRequest req)
         {
-            var token = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId && cryptoService.GetHash(req.RefreshToken) == x.AccessToken && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
+            var token = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId && cryptoService.GetHash(req.RefreshToken) == x.RefreshTokenHash && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
 
             if (token == null)
             {
@@ -49,7 +49,7 @@ namespace Authentication.Services
                 return;
             }
 
-            if(token.Used)
+            if (token.Used)
             {
                 var userTokens = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId).ToList();
                 appDbContext.UserTokens.RemoveRange(userTokens);
@@ -76,7 +76,7 @@ namespace Authentication.Services
             string roleName = appDbContext.Roles.Where(x => x.Id == userRole).First().NormalizedName;
 
             privileges.Roles.Add(roleName);
-            
+
             privileges.Claims.Add(new("UserId", request.UserId));
             privileges.Claims.Add(new("UserEmail", user.Email));
             privileges.Claims.Add(new("UserName", user.Username));
