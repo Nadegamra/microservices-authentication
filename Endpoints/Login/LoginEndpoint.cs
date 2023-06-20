@@ -25,7 +25,7 @@ namespace Authentication.Endpoints.Login
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
             var user = appDbContext.Users.Where(x => x.Email == req.Email).FirstOrDefault();
-            if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash)
+            if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash || !user.EmailConfirmed)
             {
                 await SendErrorsAsync(400, ct);
                 return;
@@ -33,6 +33,9 @@ namespace Authentication.Endpoints.Login
 
             var userRole = appDbContext.UserRoles.Where(x => x.UserId == user.Id).First().RoleId;
             string roleName = appDbContext.Roles.Where(x => x.Id == userRole).First().NormalizedName;
+
+            user.IsDeleted = false;
+            user.DeletedAt = null;
 
             Response = await CreateTokenWith<TokenService>(user.Id.ToString(), u =>
             {

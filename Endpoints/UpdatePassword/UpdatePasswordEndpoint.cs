@@ -7,7 +7,7 @@ namespace Authentication.Endpoints.UpdatePassword
     {
         public override void Configure()
         {
-            Post("auth/updatePassword");
+            Put("auth/updatePassword");
         }
 
         private readonly AuthDbContext appDbContext;

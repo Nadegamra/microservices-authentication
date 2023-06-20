@@ -1,4 +1,6 @@
-﻿using FastEndpoints;
+﻿using Authentication.IntegrationEvents.Events;
+using FastEndpoints;
+using Infrastructure.EventBus.Generic;
 
 namespace Authentication.Endpoints.ConfirmEmail
 {
@@ -9,11 +11,14 @@ namespace Authentication.Endpoints.ConfirmEmail
             Post("auth/confirmEmail");
             AllowAnonymous();
         }
-        private readonly AuthDbContext appDbContext;
 
-        public ConfirmEmailEndpoint(AuthDbContext appDbContext)
+        private readonly AuthDbContext appDbContext;
+        private readonly Infrastructure.EventBus.Generic.IEventBus eventBus;
+
+        public ConfirmEmailEndpoint(AuthDbContext appDbContext, Infrastructure.EventBus.Generic.IEventBus eventBus)
         {
             this.appDbContext = appDbContext;
+            this.eventBus = eventBus;
         }
 
         public override async Task HandleAsync(ConfirmEmailRequest req, CancellationToken ct)
@@ -38,6 +43,13 @@ namespace Authentication.Endpoints.ConfirmEmail
                     appDbContext.Users.Update(user);
                     appDbContext.EmailConfirmationTokens.Remove(token);
                     appDbContext.SaveChanges();
+
+                    eventBus.Publish(new CreatorRegisteredIntegrationEvent()
+                    {
+                        UserId = user.Id,
+                        Email = user.Email,
+                        Username = user.Username,
+                    });
 
                     await SendOkAsync(ct);
                     return;

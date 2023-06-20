@@ -43,22 +43,12 @@ namespace Authentication.Endpoints.ChangeEmail
             user.Email = token.EmailAddress;
             user.NormalizedEmail = token.EmailAddress.ToUpper();
 
-            user.Username = token.EmailAddress;
-            user.NormalizedUsername = token.EmailAddress.ToUpper();
-
             appDbContext.Users.Update(user);
 
             eventBus.Publish(new UserEmailChangedIntegrationEvent()
             {
                 NewEmail = token.EmailAddress,
                 OldEmail = oldEmail,
-                UserId = user.Id
-            });
-
-            eventBus.Publish(new UserNameChangedIntegrationEvent()
-            {
-                NewUserName = token.EmailAddress,
-                OldUserName = oldUsername,
                 UserId = user.Id
             });
 

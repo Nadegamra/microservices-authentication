@@ -3,6 +3,7 @@ using System;
 using Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authentication.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230620131759_IsUserDeleted")]
+    partial class IsUserDeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,12 +233,12 @@ namespace Authentication.Migrations
                     b.Property<DateTime>("AccessExpiry")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("RefreshExpiry")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("RefreshTokenHash")
+                    b.Property<string>("AccessToken")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshExpiry")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("Used")
                         .HasColumnType("tinyint(1)");
