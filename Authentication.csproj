@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="5.11.0" />
+    <PackageReference Include="FastEndpoints" Version="5.13.0" />
     <PackageReference Include="FastEndpoints.Security" Version="5.11.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="5.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
