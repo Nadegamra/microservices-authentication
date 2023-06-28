@@ -4,7 +4,7 @@ using FastEndpoints;
 
 namespace Authentication.Endpoints.ChangePassword
 {
-    public class ChangePasswordEndpoint: Endpoint<ChangePasswordRequest, EmptyResponse>
+    public class ChangePasswordEndpoint : Endpoint<ChangePasswordRequest, EmptyResponse>
     {
         public override void Configure()
         {
@@ -26,6 +26,7 @@ namespace Authentication.Endpoints.ChangePassword
             PasswordChangeToken? token = appDbContext.PasswordChangeTokens.Where(x => x.Token == req.Token).FirstOrDefault();
             if (token == null)
             {
+                AddError("Invalid token");
                 await SendErrorsAsync(400, ct);
                 return;
             }
@@ -33,6 +34,7 @@ namespace Authentication.Endpoints.ChangePassword
             var user = appDbContext.Users.Where(x => x.Id == token.UserId).FirstOrDefault();
             if (user == null)
             {
+                AddError("Invalid token");
                 await SendErrorsAsync(400, ct);
                 return;
             }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Authentication.Endpoints.SendEmailChangeToken
 {
-    public class SendEmailChangeTokenEndpoint: Endpoint<SendEmailChangeTokenRequest, EmptyResponse, SendEmailChangeTokenMapper>
+    public class SendEmailChangeTokenEndpoint : Endpoint<SendEmailChangeTokenRequest, EmptyResponse, SendEmailChangeTokenMapper>
     {
         public override void Configure()
         {
@@ -28,7 +28,7 @@ namespace Authentication.Endpoints.SendEmailChangeToken
 
         public override async Task HandleAsync(SendEmailChangeTokenRequest req, CancellationToken ct)
         {
-            User? user = appDbContext.Users.Where(x=>x.Id == req.UserId).FirstOrDefault();
+            User? user = appDbContext.Users.Where(x => x.Id == req.UserId).FirstOrDefault();
             if (user == null)
             {
                 await SendErrorsAsync(400, ct);

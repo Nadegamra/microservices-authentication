@@ -1,6 +1,4 @@
-﻿using Infrastructure.EventBus.Generic;
-
-namespace Authentication.BackgroundTasks
+﻿namespace Authentication.BackgroundTasks
 {
     public class ClearExpiredRefreshTokens : BackgroundService
     {

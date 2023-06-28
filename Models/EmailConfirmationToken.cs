@@ -6,7 +6,7 @@ namespace Authentication.Models
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Token { get; set; }
+        public required int UserId { get; set; }
+        public required string Token { get; set; }
     }
 }

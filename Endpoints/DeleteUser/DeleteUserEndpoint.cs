@@ -34,7 +34,8 @@ namespace Authentication.Endpoints.DeleteUser
                 var adminCount = authDbContext.UserRoles.Where(x => x.RoleId == 1).Count();
                 if (adminCount == 1)
                 {
-                    await SendErrorsAsync(400, ct);
+                    AddError("Cannot delete last admin");
+                    await SendNotFoundAsync(ct);
                     return;
                 }
             }

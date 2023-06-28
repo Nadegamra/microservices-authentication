@@ -1,10 +1,9 @@
 ﻿using Authentication.IntegrationEvents.Events;
 using FastEndpoints;
-using Infrastructure.EventBus.Generic;
 
 namespace Authentication.Endpoints.ConfirmEmail
 {
-    public class ConfirmEmailEndpoint: Endpoint<ConfirmEmailRequest>
+    public class ConfirmEmailEndpoint : Endpoint<ConfirmEmailRequest>
     {
         public override void Configure()
         {
@@ -23,38 +22,36 @@ namespace Authentication.Endpoints.ConfirmEmail
 
         public override async Task HandleAsync(ConfirmEmailRequest req, CancellationToken ct)
         {
-            var token = appDbContext.EmailConfirmationTokens.Where(x=>x.Token.Equals(req.Token)).FirstOrDefault();
+            var token = appDbContext.EmailConfirmationTokens.Where(x => x.Token.Equals(req.Token)).FirstOrDefault();
             if (token == null)
             {
+                AddError("Invalid token");
                 await SendErrorsAsync(400, ct);
-                return; 
+                return;
             }
-            else
+
+            var user = appDbContext.Users.Where(x => x.Id == token.UserId).FirstOrDefault();
+            if (user == null)
             {
-                var user = appDbContext.Users.Where(x=>x.Id == token.UserId).FirstOrDefault();
-                if(user == null)
-                {
-                    await SendErrorsAsync(400, ct);
-                    return;
-                }
-                else
-                {
-                    user.EmailConfirmed = true;
-                    appDbContext.Users.Update(user);
-                    appDbContext.EmailConfirmationTokens.Remove(token);
-                    appDbContext.SaveChanges();
-
-                    eventBus.Publish(new CreatorRegisteredIntegrationEvent()
-                    {
-                        UserId = user.Id,
-                        Email = user.Email,
-                        Username = user.Username,
-                    });
-
-                    await SendOkAsync(ct);
-                    return;
-                }
+                AddError("Invalid token");
+                await SendErrorsAsync(400, ct);
+                return;
             }
+
+            user.EmailConfirmed = true;
+            appDbContext.Users.Update(user);
+            appDbContext.EmailConfirmationTokens.Remove(token);
+            appDbContext.SaveChanges();
+
+            eventBus.Publish(new CreatorRegisteredIntegrationEvent()
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Username = user.Username,
+            });
+
+            await SendOkAsync(ct);
+            return;
         }
     }
 }

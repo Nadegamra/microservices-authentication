@@ -2,8 +2,8 @@
 {
     public class SmtpConfig
     {
-        public string? EmailAddress { get; set; }
-        public string? EmailPassword { get; set; }
-        public string? TestEmail { get; set; }
+        public required string EmailAddress { get; set; }
+        public required string EmailPassword { get; set; }
+        public required string TestEmail { get; set; }
     }
 }

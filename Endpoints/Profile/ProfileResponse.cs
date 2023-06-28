@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-
-namespace Authentication.Endpoints.Profile
+﻿namespace Authentication.Endpoints.Profile
 {
     public class ProfileResponse
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public bool EmailConfirmed { get; set; }
+        public required int Id { get; set; }
+        public required string Username { get; set; }
+        public required string Email { get; set; }
+        public required bool EmailConfirmed { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Authentication.Endpoints.UpdatePassword
             var user = appDbContext.Users.Where(x => x.Id == req.UserId).FirstOrDefault();
             if (user is null || !user.PasswordHash.Equals(cryptoService.GetHash(req.OldPassword)))
             {
+                AddError("Invalid current password");
                 await SendErrorsAsync(400, ct);
                 return;
             }

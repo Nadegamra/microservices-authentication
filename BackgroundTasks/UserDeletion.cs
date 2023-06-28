@@ -1,5 +1,4 @@
 using Authentication.IntegrationEvents.Events;
-using Infrastructure.EventBus.Generic;
 
 namespace Authentication.BackgroundTasks
 {

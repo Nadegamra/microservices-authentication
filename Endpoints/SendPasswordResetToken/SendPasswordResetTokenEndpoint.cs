@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Authentication.Endpoints.SendPasswordResetToken
 {
-    public class SendPasswordResetTokenEndpoint: Endpoint<SendPasswordResetTokenRequest>
+    public class SendPasswordResetTokenEndpoint : Endpoint<SendPasswordResetTokenRequest>
     {
         public override void Configure()
         {
@@ -35,7 +35,7 @@ namespace Authentication.Endpoints.SendPasswordResetToken
                 await SendErrorsAsync(400, ct);
                 return;
             }
-            PasswordChangeToken token = new PasswordChangeToken
+            PasswordChangeToken token = new()
             {
                 UserId = user.Id,
                 Token = cryptoService.GenerateRandomUrlSafeBase64String(64),

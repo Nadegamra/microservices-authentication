@@ -22,12 +22,12 @@ namespace Authentication.Endpoints.Profile
 
             if (user is null)
             {
-                await SendNotFoundAsync();
+                await SendNotFoundAsync(ct);
+                return;
             }
-            else
-            {
-                await SendOkAsync(Map.FromEntity(user));
-            }
+
+            Response = Map.FromEntity(user);
+            await SendOkAsync(Response, ct);
         }
     }
 }
