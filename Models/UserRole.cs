@@ -5,7 +5,7 @@ namespace Authentication.Models
     [PrimaryKey("UserId", "RoleId")]
     public class UserRole
     {
-        public int UserId { get; set; }
-        public int RoleId { get; set; }
+        public required int UserId { get; set; }
+        public required int RoleId { get; set; }
     }
 }

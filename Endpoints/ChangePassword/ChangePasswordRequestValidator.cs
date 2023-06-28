@@ -1,14 +1,13 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using FluentValidation;
 
-namespace Authentication.Endpoints.Register
+namespace Authentication.Endpoints.ChangePassword
 {
-    public class RegisterRequestValidator : Validator<RegisterRequest>
+    public class ChangePasswordRequestValidator : Validator<ChangePasswordRequest>
     {
-        public RegisterRequestValidator()
+        public ChangePasswordRequestValidator()
         {
-            RuleFor(x => x.Email).EmailAddress();
-            RuleFor(x => x.Password).Custom((password, context) =>
+            RuleFor(x => x.NewPassword).Custom((password, context) =>
             {
                 if (password.Length < 8)
                 {
@@ -31,7 +30,6 @@ namespace Authentication.Endpoints.Register
                     context.AddFailure("Password must contain at least one symbol");
                 }
             });
-            RuleFor(x => x.Role).InclusiveBetween(0, 1);
         }
     }
 }

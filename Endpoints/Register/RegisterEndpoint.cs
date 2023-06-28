@@ -34,6 +34,7 @@ namespace Authentication.Endpoints.Register
 
             if (appDbContext.Users.Where(x => x.NormalizedEmail.Equals(req.Email.ToUpper())).FirstOrDefault() != null)
             {
+                AddError("Email already exists");
                 await SendErrorsAsync(400, ct);
                 return;
             }
@@ -44,11 +45,11 @@ namespace Authentication.Endpoints.Register
             UserRole userRole = new UserRole
             {
                 UserId = result.Entity.Id,
-                RoleId = req.Role == Enums.Role.Consumer ? 3 : 2,//TODO: increase clarity
+                RoleId = (Enums.Role)req.Role == Enums.Role.Consumer ? 3 : 2,//TODO: increase clarity
             };
             appDbContext.UserRoles.Add(userRole);
 
-            EmailConfirmationToken token = new EmailConfirmationToken
+            EmailConfirmationToken token = new()
             {
                 UserId = result.Entity.Id,
                 Token = cryptoService.GenerateRandomUrlSafeBase64String(64)

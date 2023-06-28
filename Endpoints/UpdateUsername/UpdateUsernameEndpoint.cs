@@ -1,11 +1,10 @@
 ﻿using Authentication.IntegrationEvents.Events;
 using Authentication.Models;
 using FastEndpoints;
-using YamlDotNet.Core.Tokens;
 
 namespace Authentication.Endpoints.UpdateUsername
 {
-    public class UpdateUsernameEndpoint: Endpoint<UpdateUsernameRequest>
+    public class UpdateUsernameEndpoint : Endpoint<UpdateUsernameRequest>
     {
         public override void Configure()
         {
@@ -23,10 +22,10 @@ namespace Authentication.Endpoints.UpdateUsername
 
         public override async Task HandleAsync(UpdateUsernameRequest req, CancellationToken ct)
         {
-            User? user = authDbContext.Users.Where(x=>x.Id == req.UserId).FirstOrDefault();
-            if(user == null)
+            User? user = authDbContext.Users.Where(x => x.Id == req.UserId).FirstOrDefault();
+            if (user == null)
             {
-                await SendErrorsAsync(400);
+                await SendErrorsAsync(400, ct);
                 return;
             }
 

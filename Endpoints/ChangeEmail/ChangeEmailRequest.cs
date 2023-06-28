@@ -1,6 +1,4 @@
-﻿using FastEndpoints;
-
-namespace Authentication.Endpoints.ChangeEmail
+﻿namespace Authentication.Endpoints.ChangeEmail
 {
     public class ChangeEmailRequest
     {

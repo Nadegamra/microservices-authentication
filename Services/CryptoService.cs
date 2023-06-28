@@ -19,12 +19,12 @@ namespace Authentication.Services
         {
             // Generate a random byte array
             byte[] randomBytes = new byte[length];
-            Random random = new Random();
+            Random random = new();
             random.NextBytes(randomBytes);
 
             // Convert the byte array to a URL-safe base64 string
             string base64String = Convert.ToBase64String(randomBytes);
-            StringBuilder urlSafeStringBuilder = new StringBuilder(base64String);
+            StringBuilder urlSafeStringBuilder = new(base64String);
             urlSafeStringBuilder.Replace("+", "-").Replace("/", "_").Replace("=", "");
 
             return urlSafeStringBuilder.ToString();

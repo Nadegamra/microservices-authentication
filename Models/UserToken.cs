@@ -6,10 +6,10 @@ namespace Authentication.Models
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         public required string RefreshTokenHash { get; set; }
         public DateTime AccessExpiry { get; internal set; }
         public DateTime RefreshExpiry { get; internal set; }
-        public bool Used { get; set; } = false;
+        public required bool Used { get; set; } = false;
     }
 }

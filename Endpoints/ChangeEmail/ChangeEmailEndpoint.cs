@@ -1,11 +1,10 @@
 ﻿using Authentication.IntegrationEvents.Events;
 using Authentication.Models;
 using FastEndpoints;
-using Infrastructure.EventBus.Generic;
 
 namespace Authentication.Endpoints.ChangeEmail
 {
-    public class ChangeEmailEndpoint: Endpoint<ChangeEmailRequest, EmptyResponse>
+    public class ChangeEmailEndpoint : Endpoint<ChangeEmailRequest, EmptyResponse>
     {
         public override void Configure()
         {
@@ -23,16 +22,18 @@ namespace Authentication.Endpoints.ChangeEmail
 
         public override async Task HandleAsync(ChangeEmailRequest req, CancellationToken ct)
         {
-            EmailChangeToken? token = appDbContext.EmailChangeTokens.Where(x=>x.Token == req.Token).FirstOrDefault();
-            if(token == null)
+            EmailChangeToken? token = appDbContext.EmailChangeTokens.Where(x => x.Token == req.Token).FirstOrDefault();
+            if (token == null)
             {
+                AddError("Invalid token");
                 await SendErrorsAsync(400, ct);
                 return;
             }
 
-            var user = appDbContext.Users.Where(x=>x.Id == token.UserId).FirstOrDefault();
-            if(user == null)
+            var user = appDbContext.Users.Where(x => x.Id == token.UserId).FirstOrDefault();
+            if (user == null)
             {
+                AddError("Invalid token");
                 await SendErrorsAsync(400, ct);
                 return;
             }

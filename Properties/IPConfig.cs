@@ -2,7 +2,7 @@
 {
     public class IPConfig
     {
-        public string Address { get; set; }
-        public string Port { get; set; }
+        public required string Address { get; set; }
+        public required string Port { get; set; }
     }
 }

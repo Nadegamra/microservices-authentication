@@ -1,5 +1,4 @@
-﻿using FastEndpoints;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Net;
 using Authentication.Properties;
 using Microsoft.Extensions.Options;
@@ -49,7 +48,7 @@ namespace Authentication.Services
             return true;
         }
 
-        //[Obsolete("Do not use this in Production code!!!", true)]
+        [Obsolete("Do not use this in Production code!!!", false)]
         static void NEVER_EAT_POISON_Disable_CertificateValidation()
         {
             // Disabling certificate validation can expose you to a man-in-the-middle attack
@@ -61,7 +60,8 @@ namespace Authentication.Services
                     X509Certificate certificate,
                     X509Chain chain,
                     SslPolicyErrors sslPolicyErrors
-                ) {
+                )
+                {
                     return true;
                 };
         }

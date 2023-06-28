@@ -2,6 +2,6 @@
 {
     public class SendPasswordResetTokenRequest
     {
-        public string EmailAddress { get; set; }
+        public required string EmailAddress { get; set; }
     }
 }

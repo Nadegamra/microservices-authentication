@@ -1,6 +1,4 @@
 ﻿using FastEndpoints;
-using System.Security.Cryptography;
-using System.Text;
 using Authentication.Services;
 
 namespace Authentication.Endpoints.Login
@@ -25,8 +23,9 @@ namespace Authentication.Endpoints.Login
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
             var user = appDbContext.Users.Where(x => x.Email == req.Email).FirstOrDefault();
-            if (user == null || hashingService.GetHash(req.Password) != user.PasswordHash || !user.EmailConfirmed)
+            if (user is null || hashingService.GetHash(req.Password) != user.PasswordHash || !user.EmailConfirmed)
             {
+                AddError("Invalid credentials");
                 await SendErrorsAsync(400, ct);
                 return;
             }
@@ -40,7 +39,6 @@ namespace Authentication.Endpoints.Login
             Response = await CreateTokenWith<TokenService>(user.Id.ToString(), u =>
             {
                 u.Roles.Add(roleName);
-                //u.Permissions.AddRange(new[] { "ManageUsers", "ManageInventory" });
                 u.Claims.Add(new("UserId", user.Id.ToString()));
                 u.Claims.Add(new("UserEmail", user.Email));
                 u.Claims.Add(new("UserName", user.Username));
