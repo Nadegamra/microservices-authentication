@@ -26,10 +26,6 @@ namespace Authentication.Endpoints.Register
                 {
                     context.AddFailure("Password must contain at least one digit");
                 }
-                if (!password.Any(char.IsSymbol))
-                {
-                    context.AddFailure("Password must contain at least one symbol");
-                }
             });
             RuleFor(x => x.Role).InclusiveBetween(0, 1);
         }
