@@ -25,10 +25,6 @@ namespace Authentication.Endpoints.ChangePassword
                 {
                     context.AddFailure("Password must contain at least one digit");
                 }
-                if (!password.Any(char.IsSymbol))
-                {
-                    context.AddFailure("Password must contain at least one symbol");
-                }
             });
         }
     }
