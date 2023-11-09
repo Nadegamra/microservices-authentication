@@ -18,7 +18,7 @@ var services = builder.Services;
     {
         options.AddDefaultPolicy(policy =>
         {
-            policy.WithOrigins("https://localhost:3000", "http://localhost:3000")
+            policy.WithOrigins("http://localhost", "https://localhost", "http://localhost:3000", "https://nadegamraolpfrontend.azurewebsites.net")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -29,7 +29,7 @@ var services = builder.Services;
     services.AddHostedService<UserDeletion>();
 
     services.AddFastEndpoints();
-    services.AddJWTBearerAuth(builder.Configuration["JwtSecret"]);
+    services.AddJWTBearerAuth(builder.Configuration["JWT:Secret"]);
     services.SwaggerDocument();
 
     services.Configure<SmtpConfig>(builder.Configuration.GetSection("Smtp"));
@@ -48,7 +48,7 @@ var services = builder.Services;
 }
 var app = builder.Build();
 {
-    app.UseHttpsRedirection();
+    // app.UseHttpsRedirection();
 
     app.UseCors();
 

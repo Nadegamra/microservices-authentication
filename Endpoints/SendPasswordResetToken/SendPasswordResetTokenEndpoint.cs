@@ -45,7 +45,7 @@ namespace Authentication.Endpoints.SendPasswordResetToken
             appDbContext.SaveChanges();
 
             string emailSubject = "Password reset";
-            string emailBody = $"<div>If you have not requested a password reset, you can ignore this email.<br/>Your password reset link:<br/>http://{ipConfig.Value.Address}:{ipConfig.Value.Port}/changePassword/{token.Token}</div>";
+            string emailBody = $"<div>If you have not requested a password reset, you can ignore this email.<br/>Your password reset link:<br/>https://{ipConfig.Value.Address}/changePassword/{token.Token}</div>";
             emailService.SendEmail(user.Email, emailSubject, emailBody);
 
             await SendOkAsync(ct);

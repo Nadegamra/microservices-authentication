@@ -40,7 +40,7 @@ namespace Authentication.Endpoints.SendEmailChangeToken
             appDbContext.SaveChanges();
 
             string emailSubject = "Email Change";
-            string emailBody = $"<div>You have requested to change your email to {req.EmailAddress}. If you have not initiated this action, your account may have been compromised.<br/>Your email change link:<br/>http://{ipConfig.Value.Address}:{ipConfig.Value.Port}/changeEmail/{token.Token}</div>";
+            string emailBody = $"<div>You have requested to change your email to {req.EmailAddress}. If you have not initiated this action, your account may have been compromised.<br/>Your email change link:<br/>https://{ipConfig.Value.Address}/changeEmail/{token.Token}</div>";
             emailService.SendEmail(user.Email, emailSubject, emailBody);
 
             await SendOkAsync(ct);
