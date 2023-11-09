@@ -59,7 +59,7 @@ namespace Authentication.Endpoints.Register
             appDbContext.SaveChanges();
 
             string emailSubject = "Account confirmation";
-            string emailBody = $"<div>If you have not created this account, you can ignore this email.<br/>Your email confirmation link:<br/>http://{ipConfig.Value.Address}:{ipConfig.Value.Port}/confirmEmail/{token.Token}</div>";
+            string emailBody = $"<div>If you have not created this account, you can ignore this email.<br/>Your email confirmation link:<br/>https://{ipConfig.Value.Address}/confirmEmail/{token.Token}</div>";
             emailService.SendEmail(req.Email, emailSubject, emailBody);
 
             await SendOkAsync(ct);

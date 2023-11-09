@@ -13,7 +13,7 @@ namespace Authentication.Services
         {
             Setup(o =>
             {
-                o.TokenSigningKey = config["JwtSecret"];
+                o.TokenSigningKey = config["JWT:Secret"];
                 o.AccessTokenValidity = TimeSpan.FromMinutes(5);
                 o.RefreshTokenValidity = TimeSpan.FromHours(4);
 
