@@ -27,7 +27,6 @@ namespace Authentication.Endpoints.Register
                     context.AddFailure("Password must contain at least one digit");
                 }
             });
-            RuleFor(x => x.Role).InclusiveBetween(0, 1);
         }
     }
 }
