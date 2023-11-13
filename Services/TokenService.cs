@@ -5,7 +5,7 @@ using FastEndpoints.Security;
 
 namespace Authentication.Services
 {
-    public class TokenService : RefreshTokenService<LoginRequest, LoginResponse>
+    public class TokenService : RefreshTokenService<TokenRequest, TokenResponse>
     {
         private readonly AuthDbContext appDbContext;
         private readonly CryptoService cryptoService;
@@ -26,7 +26,7 @@ namespace Authentication.Services
             this.cryptoService = cryptoService;
         }
 
-        public override async Task PersistTokenAsync(LoginResponse response)
+        public override async Task PersistTokenAsync(TokenResponse response)
         {
             appDbContext.UserTokens.Add(new UserToken
             {
@@ -39,7 +39,7 @@ namespace Authentication.Services
             appDbContext.SaveChanges();
         }
 
-        public override async Task RefreshRequestValidationAsync(LoginRequest req)
+        public override async Task RefreshRequestValidationAsync(TokenRequest req)
         {
             var token = appDbContext.UserTokens.Where(x => x.UserId.ToString() == req.UserId && cryptoService.GetHash(req.RefreshToken) == x.RefreshTokenHash && x.RefreshExpiry > DateTime.Now).FirstOrDefault();
 
@@ -64,7 +64,7 @@ namespace Authentication.Services
 
         }
 
-        public override async Task SetRenewalPrivilegesAsync(LoginRequest request, UserPrivileges privileges)
+        public override async Task SetRenewalPrivilegesAsync(TokenRequest request, UserPrivileges privileges)
         {
             var user = appDbContext.Users.Where(x => x.Id.ToString() == request.UserId).FirstOrDefault();
             if (user == null)

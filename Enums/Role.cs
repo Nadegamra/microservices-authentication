@@ -2,7 +2,7 @@
 {
     public enum Role
     {
-        Creator,
-        Consumer
+        Creator = 2,
+        Consumer = 3
     }
 }

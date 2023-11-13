@@ -1,9 +1,10 @@
 ﻿using FastEndpoints;
 using Authentication.Services;
+using FastEndpoints.Security;
 
 namespace Authentication.Endpoints.Login
 {
-    public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
+    public class LoginEndpoint : Endpoint<LoginRequest, TokenResponse>
     {
         public override void Configure()
         {

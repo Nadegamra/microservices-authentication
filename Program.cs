@@ -1,12 +1,13 @@
+using System.Text.Json.Serialization;
 using Authentication;
 using Authentication.BackgroundTasks;
+using Authentication.Enums;
 using Authentication.Properties;
 using Authentication.Services;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,7 +58,10 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.UseFastEndpoints();
+    app.UseFastEndpoints(c =>
+    {
+        c.Serializer.Options.Converters.Add(new JsonStringEnumConverter());
+    });
 
     app.UseSwaggerGen();
 
