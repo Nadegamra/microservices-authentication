@@ -22,13 +22,14 @@ namespace Authentication.Endpoints.Register
         private readonly CryptoService cryptoService;
         private readonly IOptions<IPConfig> ipConfig;
 
-        public RegisterEndpoint(EmailService emailService, CryptoService cryptoService, IOptions<IPConfig> ipConfig, IRepository<User> userRepository, IRepository<UserRole> userRoleRepository)
+        public RegisterEndpoint(EmailService emailService, CryptoService cryptoService, IOptions<IPConfig> ipConfig, IRepository<User> userRepository, IRepository<UserRole> userRoleRepository, IRepository<EmailConfirmationToken> tokenRepository)
         {
             this.emailService = emailService;
             this.cryptoService = cryptoService;
             this.ipConfig = ipConfig;
             this.userRepository = userRepository;
             this.userRoleRepository = userRoleRepository;
+            this.tokenRepository = tokenRepository;
         }
 
         public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
