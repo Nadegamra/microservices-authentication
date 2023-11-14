@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using Authentication;
 using Authentication.BackgroundTasks;
+using Authentication.Data.Repositories;
 using Authentication.Enums;
+using Authentication.Models;
 using Authentication.Properties;
 using Authentication.Services;
 using FastEndpoints;
@@ -33,9 +35,19 @@ var services = builder.Services;
     services.AddJWTBearerAuth(builder.Configuration["JWT:Secret"]);
     services.SwaggerDocument();
 
+    // Configuration
     services.Configure<SmtpConfig>(builder.Configuration.GetSection("Smtp"));
     services.Configure<IPConfig>(builder.Configuration.GetSection("IP"));
 
+    services.AddScoped<IRepository<EmailChangeToken>, EmailChangeTokenRepository>();
+    services.AddScoped<IRepository<EmailConfirmationToken>, EmailConfirmationTokenRepository>();
+    services.AddScoped<IRepository<PasswordChangeToken>, PasswordChangeTokenRepository>();
+    services.AddScoped<IRepository<Authentication.Models.Role>, RoleRepository>();
+    services.AddScoped<IRepository<User>, UserRepository>();
+    services.AddScoped<IRepository<UserRole>, UserRoleRepository>();
+    services.AddScoped<IRepository<UserToken>, UserTokenRepository>();
+
+    // Services
     services.AddTransient<TokenService>();
     services.AddTransient<CryptoService>();
     services.AddTransient<EmailService>();
