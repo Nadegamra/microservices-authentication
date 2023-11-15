@@ -6,4 +6,4 @@ An example .NET microservice with JWT authentication
 - Email, Username and Password change functionality
 - Token theft detection by tracking if refresh token is used multiple times
 # API reference
-[API Reference](./APIReference.md)
+For more info on the exact functionality of API's endpoints, view [here](./APIReference.md)
