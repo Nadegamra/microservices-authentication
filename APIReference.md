@@ -161,7 +161,7 @@
     }
     ```
 - **Response Type:** `-`
-- **Sample Request:** `POST /auth/confirmEmail`
+- **Sample Request:** `PUT /auth/confirmEmail`
   ```json
   {
     "token": "U12M6omCamOgqjUYnpxmnUH39bbw6f08eSp_eBrU6-WA5DWHHxnZyvUTLWoZunwyfYET4FB4dSQ02XszNr01sw"
@@ -254,7 +254,7 @@
   }
   ```
 - **Response Type:** `-`
-- **Sample Request:** `POST /auth/changeEmail`
+- **Sample Request:** `PUT /auth/changeEmail`
 - **Response Codes:**
   - Email changed successfully: `204 No Content`
     - **Sample Response:** `-`
@@ -296,7 +296,7 @@
   }
   ```
 - **Response Type:** `-`
-- **Sample Request:** `POST /auth/changePassword`
+- **Sample Request:** `PUT /auth/changePassword`
   ```javascript
   {
     "token": "U12M6omCamOgqjUYnpxmnUH39bbw6f08eSp_eBrU6-WA5DWHHxnZyvUTLWoZunwyfYET4FB4dSQ02XszNr01sw",
@@ -322,7 +322,7 @@
   }
   ```
 - **Response Type:** `-`
-- **Sample Request:** `POST /auth/updatePassword`
+- **Sample Request:** `PUT /auth/updatePassword`
   ```javascript
   {
     "oldPassword": "OldPassword123$",
@@ -347,7 +347,7 @@
   }
   ```
 - **Response Type:** `-`
-- **Sample Request:** `POST /auth/updatePassword`
+- **Sample Request:** `PUT /auth/updatePassword`
   ```javascript
   {
     "newUsername": "VeryGoodUsername"
