@@ -9,7 +9,7 @@ namespace Authentication.Endpoints.ConfirmEmail
     {
         public override void Configure()
         {
-            Post("auth/confirmEmail");
+            Put("auth/confirmEmail");
             AllowAnonymous();
         }
 
@@ -29,16 +29,14 @@ namespace Authentication.Endpoints.ConfirmEmail
             var token = tokenRepository.GetAll().Where(x => x.Token.Equals(req.Token)).FirstOrDefault();
             if (token == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
             var user = userRepository.Get(token.UserId);
             if (user == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
@@ -54,7 +52,7 @@ namespace Authentication.Endpoints.ConfirmEmail
                 Username = user.Username,
             });
 
-            await SendOkAsync(ct);
+            await SendNotFoundAsync(ct);
             return;
         }
     }

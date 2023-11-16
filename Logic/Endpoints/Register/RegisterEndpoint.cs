@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Authentication.Endpoints.Register
 {
-    public class RegisterEndpoint : Endpoint<RegisterRequest, EmptyResponse, RegisterMapper>
+    public class RegisterEndpoint : Endpoint<RegisterRequest, User, RegisterMapper>
     {
         public override void Configure()
         {
@@ -39,8 +39,7 @@ namespace Authentication.Endpoints.Register
 
             if (userRepository.GetAll().Where(x => x.NormalizedEmail.Equals(req.Email.ToUpper())).FirstOrDefault() != null)
             {
-                AddError("Email already exists");
-                await SendErrorsAsync(400, ct);
+                await SendErrorsAsync(409, ct);
                 return;
             }
 
@@ -66,7 +65,7 @@ namespace Authentication.Endpoints.Register
             string emailBody = $"<div>If you have not created this account, you can ignore this email.<br/>Your email confirmation link:<br/>https://{ipConfig.Value.Address}/confirmEmail/{token.Token}</div>";
             emailService.SendEmail(req.Email, emailSubject, emailBody);
 
-            await SendOkAsync(ct);
+            await SendCreatedAtAsync("/auth/profile", null, result);
         }
     }
 }

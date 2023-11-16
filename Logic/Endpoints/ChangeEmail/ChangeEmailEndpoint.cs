@@ -9,7 +9,7 @@ namespace Authentication.Endpoints.ChangeEmail
     {
         public override void Configure()
         {
-            Post("auth/changeEmail");
+            Put("auth/changeEmail");
             AllowAnonymous();
         }
         private readonly IRepository<User> userRepository;
@@ -28,16 +28,14 @@ namespace Authentication.Endpoints.ChangeEmail
             EmailChangeToken? token = tokenRepository.GetAll().Where(x => x.Token == req.Token).FirstOrDefault();
             if (token == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
             var user = userRepository.Get(token.UserId);
             if (user == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
