@@ -25,15 +25,14 @@ namespace Authentication.Endpoints.UpdatePassword
             var user = userRepository.Get(req.UserId);
             if (user is null || !user.PasswordHash.Equals(cryptoService.GetHash(req.OldPassword)))
             {
-                AddError("Invalid current password");
-                await SendErrorsAsync(400, ct);
+                await SendUnauthorizedAsync(ct);
                 return;
             }
             user.PasswordHash = cryptoService.GetHash(req.NewPassword);
 
             userRepository.Update(user);
 
-            await SendOkAsync(ct);
+            await SendNoContentAsync(ct);
         }
     }
 }

@@ -32,8 +32,7 @@ namespace Authentication.Endpoints.Login
             var user = userRepository.GetAll().Where(x => x.Email == req.Email).FirstOrDefault();
             if (user is null || hashingService.GetHash(req.Password) != user.PasswordHash || !user.EmailConfirmed)
             {
-                AddError("Invalid credentials");
-                await SendErrorsAsync(400, ct);
+                await SendUnauthorizedAsync(ct);
                 return;
             }
 

@@ -30,19 +30,18 @@ namespace Authentication.Endpoints.DeleteUser
 
             if (user == null)
             {
-                await SendErrorsAsync(404, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
             var userRoles = userRoleRepository.GetAll().Where(x => x.UserId == req.UserId).Select(x => x.RoleId).ToList();
-            var roleNames = roleRepository.GetAll().Where(x => userRoles.Contains(x.Id)).Select(x => x.Name).ToList();
-            if (roleNames.Contains("Admin"))
+            var roleNames = roleRepository.GetAll().Where(x => userRoles.Contains(x.Id)).Select(x => x.Name.ToUpper()).ToList();
+            if (roleNames.Contains("ADMIN"))
             {
                 var adminCount = userRoleRepository.GetAll().Where(x => x.RoleId == 1).Count();
                 if (adminCount == 1)
                 {
-                    AddError("Cannot delete last admin");
-                    await SendNotFoundAsync(ct);
+                    await SendForbiddenAsync(ct);
                     return;
                 }
             }
@@ -54,7 +53,7 @@ namespace Authentication.Endpoints.DeleteUser
             List<UserToken> userTokens = userTokenRepository.GetAll().Where(x => x.UserId == req.UserId).ToList();
             userTokens.ForEach(x => userTokenRepository.Delete(x));
 
-            await SendOkAsync(ct);
+            await SendNoContentAsync(ct);
         }
     }
 }

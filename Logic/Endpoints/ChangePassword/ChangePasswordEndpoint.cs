@@ -9,7 +9,7 @@ namespace Authentication.Endpoints.ChangePassword
     {
         public override void Configure()
         {
-            Post("auth/changePassword");
+            Put("auth/changePassword");
             AllowAnonymous();
         }
 
@@ -29,16 +29,14 @@ namespace Authentication.Endpoints.ChangePassword
             PasswordChangeToken? token = tokenRepository.GetAll().Where(x => x.Token == req.Token).FirstOrDefault();
             if (token == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
             var user = userRepository.Get(token.UserId);
             if (user == null)
             {
-                AddError("Invalid token");
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
@@ -48,7 +46,7 @@ namespace Authentication.Endpoints.ChangePassword
 
             tokenRepository.Delete(token);
 
-            await SendOkAsync(ct);
+            await SendNoContentAsync(ct);
         }
     }
 }

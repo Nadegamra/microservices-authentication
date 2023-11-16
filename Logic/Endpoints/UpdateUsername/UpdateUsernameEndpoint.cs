@@ -26,7 +26,7 @@ namespace Authentication.Endpoints.UpdateUsername
             User? user = userRepository.Get(req.UserId);
             if (user == null)
             {
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
 
@@ -44,7 +44,7 @@ namespace Authentication.Endpoints.UpdateUsername
                 UserId = user.Id
             });
 
-            await SendOkAsync(ct);
+            await SendNoContentAsync(ct);
         }
     }
 }

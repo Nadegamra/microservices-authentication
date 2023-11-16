@@ -35,7 +35,7 @@ namespace Authentication.Endpoints.SendPasswordResetToken
             User? user = userRepository.GetAll().Where(x => x.NormalizedEmail == req.EmailAddress.ToUpper()).FirstOrDefault();
             if (user == null)
             {
-                await SendErrorsAsync(400, ct);
+                await SendNotFoundAsync(ct);
                 return;
             }
             PasswordChangeToken token = new()
@@ -50,7 +50,7 @@ namespace Authentication.Endpoints.SendPasswordResetToken
             string emailBody = $"<div>If you have not requested a password reset, you can ignore this email.<br/>Your password reset link:<br/>https://{ipConfig.Value.Address}/changePassword/{token.Token}</div>";
             emailService.SendEmail(user.Email, emailSubject, emailBody);
 
-            await SendOkAsync(ct);
+            await SendNoContentAsync(ct);
         }
     }
 }
